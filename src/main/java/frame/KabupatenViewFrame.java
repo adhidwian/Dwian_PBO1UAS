@@ -28,17 +28,19 @@ public class KabupatenViewFrame extends JFrame{
         tutupButton.addActionListener(e -> {
             dispose();
         });
-
         batalButton.addActionListener(e -> {
-            dispose();
+            isiTable();
         });
-        addWindowFocusListener(new WindowAdapter() {
+        addWindowListener(new WindowAdapter() {
             @Override
-            public void windowActivated(WindowEvent e){
+            public void windowActivated(WindowEvent e) {
                 isiTable();
             }
         });
-
+        tambahButton.addActionListener(e -> {
+            KabupatenInputForm inputFrame = new KabupatenInputForm();
+            inputFrame.setVisible(true);
+        });
         cariButton.addActionListener(e -> {
             Connection c = Koneksi.getConnection();
             String keyword = "%" + cariTextField.getText() + "%";
@@ -59,11 +61,11 @@ public class KabupatenViewFrame extends JFrame{
                 throw new RuntimeException(ex);
             }
         });
-
         hapusButton.addActionListener(e -> {
             int barisTerpilih = viewTable.getSelectedRow();
             if (barisTerpilih < 0){
                 JOptionPane.showMessageDialog(null, "Pilih data dulu");
+                return;
             }
             int pilihan = JOptionPane.showConfirmDialog(null,
                     "Yakin mau hapus?",
@@ -85,8 +87,9 @@ public class KabupatenViewFrame extends JFrame{
             }
         });
 
-        isiTable();
+
         init();
+        isiTable();
     }
 
     public void init() {
