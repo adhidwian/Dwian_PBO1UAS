@@ -24,12 +24,28 @@ public class KabupatenViewFrame extends JFrame{
     private JButton tutupButton;
     private JTable viewTable;
 
+
     public KabupatenViewFrame(){
         tutupButton.addActionListener(e -> {
             dispose();
         });
         batalButton.addActionListener(e -> {
             isiTable();
+        });
+        ubahButton.addActionListener(e -> {
+            int barisTerpilih = viewTable.getSelectedRow();
+            if (barisTerpilih < 0){
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Pilih data dulu");
+                return;
+            }
+            TableModel tm = viewTable.getModel();
+            int id = Integer.parseInt(tm.getValueAt(barisTerpilih,0).toString());
+            KabupatenInputForm inputFrame = new KabupatenInputForm();
+            inputFrame.setId(id);
+            inputFrame.isiKomponen();
+            inputFrame.setVisible(true);
         });
         addWindowListener(new WindowAdapter() {
             @Override
