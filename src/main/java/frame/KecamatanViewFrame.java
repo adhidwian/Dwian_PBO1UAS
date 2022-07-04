@@ -12,6 +12,8 @@ import java.sql.*;
 import java.text.NumberFormat;
 import java.util.Locale;
 
+//Dwian Adhi Nugraha 2010010047
+
 public class KecamatanViewFrame extends JFrame{
     private JPanel mainPanel;
     private JPanel cariPanel;
