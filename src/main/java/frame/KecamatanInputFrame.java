@@ -21,6 +21,7 @@ public class KecamatanInputFrame extends JFrame{
     private JLabel luasLabel;
     private JTextField populasiTextField;
     private JTextField luasTextField;
+    private JTextField emailTextField;
 
     private ButtonGroup klasifikasiButtonGroup;
     private int id;
@@ -58,6 +59,7 @@ public class KecamatanInputFrame extends JFrame{
                 }
                 populasiTextField.setText(String.valueOf(rs.getInt("populasi")));
                 luasTextField.setText(String.valueOf(rs.getDouble("luas")));
+                emailTextField.setText(rs.getString("email"));
             }
         } catch (SQLException e){
             throw new RuntimeException(e);
@@ -126,6 +128,15 @@ public class KecamatanInputFrame extends JFrame{
                 return;
             }
 
+            String email = emailTextField.getText();
+            if(!email.contains("@") || !email.contains(".")){
+                JOptionPane.showMessageDialog(null,
+                        "Isi dengan email valid",
+                        "Validasi Email",JOptionPane.WARNING_MESSAGE);
+                emailTextField.requestFocus();
+                return;
+            }
+
             Connection c = Koneksi.getConnection();
             PreparedStatement ps;
             try {
@@ -139,14 +150,15 @@ public class KecamatanInputFrame extends JFrame{
                                 "Data sama sudah ada");
                     } else {
                         String insertSQL = "INSERT INTO kecamatan (id, nama, kabupaten_id, klasifikasi, " +
-                        "populasi, luas) " +
-                         "VALUES (NULL, ?, ?, ?, ?, ?)";
+                        "populasi, luas, email) " +
+                         "VALUES (NULL, ?, ?, ?, ?, ?, ?)";
                         ps = c.prepareStatement(insertSQL);
                         ps.setString(1, nama);
                         ps.setInt(2, kabupatenId);
                         ps.setString(3, klasifikasi);
                         ps.setInt(4, populasi);
                         ps.setDouble(5, luas);
+                        ps.setString(6, email);
                         ps.executeUpdate();
                         dispose();
                     }
@@ -160,15 +172,16 @@ public class KecamatanInputFrame extends JFrame{
                         JOptionPane.showMessageDialog(null,
                                 "Data sama sudah ada");
                     } else {
-                        String updateSQL = "UPDATE kecamatan SET nama = ?, kabupaten_id = ?, klasifikasi = ?, " +
-                                "populasi = ?, luas = ? WHERE id = ?";
+                        String updateSQL =  "UPDATE kecamatan SET nama = ?, kabupaten_id = ?, klasifikasi = ?, " +
+                        "populasi = ?, luas = ?, email = ? WHERE id = ?";
                         ps = c.prepareStatement(updateSQL);
                         ps.setString(1, nama);
                         ps.setInt(2, kabupatenId);
                         ps.setString(3, klasifikasi);
                         ps.setInt(4, populasi);
                         ps.setDouble(5, luas);
-                        ps.setInt(6, id);
+                        ps.setString(6, email);
+                        ps.setInt(7, id);
                         ps.executeUpdate();
                         dispose();
                     }
